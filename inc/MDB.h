@@ -42,10 +42,10 @@ unsigned char WriteCoil[2];
 unsigned char WriteHoldReg[10];
 unsigned char MdbResponse[20];
 
-extern unsigned char UART0Count;
-extern unsigned char UART0Buffer[255];
-extern unsigned char UART1Count;
-extern unsigned char UART1Buffer[255];
+extern volatile unsigned char UART0Count;
+extern volatile unsigned char UART0Buffer[30];
+extern volatile unsigned char UART1Count;
+extern volatile unsigned char UART1Buffer[30];
 extern float Weight;
 extern volatile float NewIMP;
 extern unsigned char LowBp;

@@ -1,10 +1,10 @@
 ******************************************************************************
                   TI ARM Linker Unix v15.12.1                  
 ******************************************************************************
->> Linked Fri Aug 11 10:25:19 2017
+>> Linked Mon Aug 14 14:15:45 2017
 
 OUTPUT FILE NAME:   <Modbus-Slave.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 00204c41
+ENTRY POINT SYMBOL: "_c_int00"  address: 00204c59
 
 
 MEMORY CONFIGURATION
@@ -16,10 +16,10 @@ MEMORY CONFIGURATION
   RESETISR              00200030   00000008  00000006  00000002  R  X
   INTVECS               00201000   000001b0  000001b0  00000000  R  X
   FLASHLOAD             00201200   00002e00  00000000  00002e00  R  X
-  FLASH                 00204000   0007bf00  00000fa6  0007af5a  R  X
+  FLASH                 00204000   0007bf00  00001056  0007aeaa  R  X
   CSM_RSVD_Z2           0027ff00   000000dc  0000000c  000000d0  RWIX
   CSM_ECSL_Z2           0027ffdc   00000024  00000024  00000000  RWIX
-  C0                    20000000   00004000  00000573  00003a8d  RW X
+  C0                    20000000   00004000  000003b8  00003c48  RW X
   BOOT_RSVD             20004000   00000900  00000000  00000900  R  X
   C2                    20004900   00001700  00000000  00001700  RW X
   C3                    20006000   00002000  00000000  00002000  RW X
@@ -45,19 +45,19 @@ run origin  load origin   length   init length attrs members
   00200030    00200030    00000006   00000006    r-x .resetisr
 00201000    00201000    000001b0   000001b0    r--
   00201000    00201000    000001b0   000001b0    r-- .intvecs
-00204000    00204000    00000fac   00000fac    r-x
-  00204000    00204000    00000eb6   00000eb6    r-x .text
-  00204eb8    00204eb8    0000009c   0000009c    r-- .const
-  00204f58    00204f58    00000054   00000054    r-- .cinit
+00204000    00204000    0000105c   0000105c    r-x
+  00204000    00204000    00000f5e   00000f5e    r-x .text
+  00204f60    00204f60    0000009c   0000009c    r-- .const
+  00205000    00205000    0000005c   0000005c    r-- .cinit
 0027ff00    0027ff00    0000000c   0000000c    r--
   0027ff00    0027ff00    0000000c   0000000c    r-- .z2_csm_rsvd
 0027ffdc    0027ffdc    00000024   00000024    r--
   0027ffdc    0027ffdc    00000024   00000024    r-- .z2secvalues
-20000000    20000000    00000573   00000000    rw-
+20000000    20000000    000003b8   00000000    rw-
   20000000    20000000    00000258   00000000    rw- .vtable
-  20000258    20000258    00000200   00000000    rw- .bss
-  20000458    20000458    00000100   00000000    rw- .stack
-  20000558    20000558    0000001b   00000000    rw- .data
+  20000258    20000258    00000100   00000000    rw- .stack
+  20000358    20000358    00000040   00000000    rw- .bss
+  20000398    20000398    00000020   00000000    rw- .data
 
 
 SECTION ALLOCATION MAP
@@ -80,7 +80,7 @@ section   page    origin      length       input sections
 .intvecs   0    00201000    000001b0     
                   00201000    000001b0     startup_ccs.obj (.intvecs)
 
-.text      0    00204000    00000eb6     
+.text      0    00204000    00000f5e     
                   00204000    0000018c     sysctl.obj (.text:SysCtlClockPllConfig)
                   0020418c    00000148     sysctl.obj (.text:SysCtlClockDividersSet)
                   002042d4    000000d4     sysctl.obj (.text:SysCtlClockGet)
@@ -99,55 +99,57 @@ section   page    origin      length       input sections
                   002049a8    0000006a                           : copy_decompress_rle.obj (.text)
                   00204a12    0000005c     gpio.obj (.text:GPIODirModeSet)
                   00204a6e    00000002     startup_ccs.obj (.text:IntDefaultHandler)
-                  00204a70    00000058     interrupt.obj (.text:IntRegister)
-                  00204ac8    00000054     rtsv7M3_T_le_eabi.lib : exit.obj (.text)
-                  00204b1c    0000004c     sysctl.obj (.text:SysCtlClockConfigSet)
-                  00204b68    0000004c     rtsv7M3_T_le_eabi.lib : cpy_tbl.obj (.text)
-                  00204bb4    00000048     sysctl.obj (.text:SysCtlPeripheralEnable)
-                  00204bfc    00000044     UART_Interrupt.obj (.text:UART1IntHandler)
-                  00204c40    00000040     rtsv7M3_T_le_eabi.lib : boot.obj (.text)
-                  00204c80    00000038     sysctl.obj (.text:SysCtlPeripheralIsEnabled)
-                  00204cb8    00000034     UART_Interrupt.obj (.text:UART0IntHandler)
-                  00204cec    00000030     uart.obj (.text:UARTDisable)
-                  00204d1c    00000024     A_Wellth_Main.obj (.text:InitializeAllUart)
-                  00204d40    00000024     uart.obj (.text:UARTEnable)
-                  00204d64    00000022     gpio.obj (.text:GPIOPinTypeUART)
-                  00204d86    0000001e     uart.obj (.text:UARTIntStatus)
-                  00204da4    0000001c     uart.obj (.text:UARTCharGetNonBlocking)
-                  00204dc0    00000018     uart.obj (.text:UARTIntEnable)
-                  00204dd8    00000018     rtsv7M3_T_le_eabi.lib : args_main.obj (.text)
-                  00204df0    00000016     uart.obj (.text:UARTCharGet)
-                  00204e06    00000002     startup_ccs.obj (.text:NmiSR)
-                  00204e08    00000014     rtsv7M3_T_le_eabi.lib : _lock.obj (.text)
-                  00204e1c    00000012     uart.obj (.text:UARTIntClear)
-                  00204e2e    00000012     watchdog.obj (.text:WatchdogReloadSet)
-                  00204e40    00000012     watchdog.obj (.text:WatchdogRunning)
-                  00204e52    00000002     rtsv7M3_T_le_eabi.lib : mpu_init.obj (.text)
-                  00204e54    00000010     UART_Interface.obj (.text:InitSystem)
-                  00204e64    0000000e     rtsv7M3_T_le_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
-                  00204e72    0000000c     cpu.obj (.text:CPUcpsie)
-                  00204e7e    0000000c     A_Wellth_Main.obj (.text:CallSystem)
-                  00204e8a    0000000a     interrupt.obj (.text:IntMasterEnable)
-                  00204e94    00000008     UART_Interface.obj (.text:InitMasterInterrupt)
-                  00204e9c    00000008     A_Wellth_Main.obj (.text:main)
-                  00204ea4    00000006     sysctl.obj (.text:SysCtlDelay)
-                  00204eaa    00000006     rtsv7M3_T_le_eabi.lib : copy_decompress_rle.obj (.text:decompress:rle24)
-                  00204eb0    00000004                           : pre_init.obj (.text)
-                  00204eb4    00000002                           : startup.obj (.text)
+                  00204a70    0000005c     UART_Interrupt.obj (.text:UART1IntHandler)
+                  00204acc    00000058     interrupt.obj (.text:IntRegister)
+                  00204b24    00000054     rtsv7M3_T_le_eabi.lib : exit.obj (.text)
+                  00204b78    0000004c     sysctl.obj (.text:SysCtlClockConfigSet)
+                  00204bc4    0000004c     rtsv7M3_T_le_eabi.lib : cpy_tbl.obj (.text)
+                  00204c10    00000048     sysctl.obj (.text:SysCtlPeripheralEnable)
+                  00204c58    00000040     rtsv7M3_T_le_eabi.lib : boot.obj (.text)
+                  00204c98    0000003c     UART_Interface.obj (.text:WriteToUART1)
+                  00204cd4    00000038     A_Wellth_Main.obj (.text:InitializeAllUart)
+                  00204d0c    00000038     sysctl.obj (.text:SysCtlPeripheralIsEnabled)
+                  00204d44    00000034     UART_Interrupt.obj (.text:UART0IntHandler)
+                  00204d78    00000030     uart.obj (.text:UARTDisable)
+                  00204da8    00000026     uart.obj (.text:UARTCharPut)
+                  00204dce    00000026     A_Wellth_Main.obj (.text:main)
+                  00204df4    00000022     gpio.obj (.text:GPIOPinTypeUART)
+                  00204e16    0000001e     uart.obj (.text:UARTIntStatus)
+                  00204e34    0000001c     UART_Interface.obj (.text:InitSystem)
+                  00204e50    00000018     uart.obj (.text:UARTEnable)
+                  00204e68    00000018     uart.obj (.text:UARTIntEnable)
+                  00204e80    00000018     uart.obj (.text:UARTSpaceAvail)
+                  00204e98    00000018     rtsv7M3_T_le_eabi.lib : args_main.obj (.text)
+                  00204eb0    00000016     uart.obj (.text:UARTCharGet)
+                  00204ec6    00000002     startup_ccs.obj (.text:NmiSR)
+                  00204ec8    00000014     rtsv7M3_T_le_eabi.lib : _lock.obj (.text)
+                  00204edc    00000012     uart.obj (.text:UARTIntClear)
+                  00204eee    00000012     watchdog.obj (.text:WatchdogReloadSet)
+                  00204f00    00000012     watchdog.obj (.text:WatchdogRunning)
+                  00204f12    0000000e     rtsv7M3_T_le_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
+                  00204f20    0000000c     cpu.obj (.text:CPUcpsie)
+                  00204f2c    0000000c     A_Wellth_Main.obj (.text:CallSystem)
+                  00204f38    0000000a     interrupt.obj (.text:IntMasterEnable)
+                  00204f42    00000008     UART_Interface.obj (.text:InitMasterInterrupt)
+                  00204f4a    00000002     rtsv7M3_T_le_eabi.lib : mpu_init.obj (.text)
+                  00204f4c    00000006     sysctl.obj (.text:SysCtlDelay)
+                  00204f52    00000006     rtsv7M3_T_le_eabi.lib : copy_decompress_rle.obj (.text:decompress:rle24)
+                  00204f58    00000004                           : pre_init.obj (.text)
+                  00204f5c    00000002                           : startup.obj (.text)
 
-.const     0    00204eb8    0000009c     
-                  00204eb8    00000088     gpio.obj (.const:g_pulGPIOBaseAddrs)
-                  00204f40    00000014     sysctl.obj (.const:g_pulRCGCRegs)
+.const     0    00204f60    0000009c     
+                  00204f60    00000088     gpio.obj (.const:g_pulGPIOBaseAddrs)
+                  00204fe8    00000014     sysctl.obj (.const:g_pulRCGCRegs)
 
-.cinit     0    00204f58    00000054     
-                  00204f58    00000017     (.cinit..data.load) [load image, compression = rle]
-                  00204f6f    00000001     --HOLE-- [fill = 0]
-                  00204f70    0000000b     (.cinit..bss.load) [load image, compression = rle]
-                  00204f7b    00000005     --HOLE-- [fill = 0]
-                  00204f80    0000000b     (.cinit..vtable.load) [load image, compression = rle]
-                  00204f8b    00000001     --HOLE-- [fill = 0]
-                  00204f8c    00000008     (__TI_handler_table)
-                  00204f94    00000018     (__TI_cinit_table)
+.cinit     0    00205000    0000005c     
+                  00205000    0000001b     (.cinit..data.load) [load image, compression = rle]
+                  0020501b    00000005     --HOLE-- [fill = 0]
+                  00205020    0000000b     (.cinit..vtable.load) [load image, compression = rle]
+                  0020502b    00000005     --HOLE-- [fill = 0]
+                  00205030    00000009     (.cinit..bss.load) [load image, compression = rle]
+                  00205039    00000003     --HOLE-- [fill = 0]
+                  0020503c    00000008     (__TI_handler_table)
+                  00205044    00000018     (__TI_cinit_table)
 
 .z2_csm_rsvd 
 *          0    0027ff00    0000000c     
@@ -162,18 +164,18 @@ section   page    origin      length       input sections
 
 ramfuncs   0    20000000    00000000     UNINITIALIZED
 
-.bss       0    20000258    00000200     UNINITIALIZED
-                  20000258    00000100     (.common:UART0Buffer)
-                  20000358    00000100     (.common:UART1Buffer)
+.bss       0    20000358    00000040     UNINITIALIZED
+                  20000358    00000020     (.common:UART0Buffer)
+                  20000378    00000020     (.common:UART1Buffer)
 
-.data      0    20000558    0000001b     UNINITIALIZED
-                  20000558    0000000c     rtsv7M3_T_le_eabi.lib : exit.obj (.data:$O1$$)
-                  20000564    00000008                           : _lock.obj (.data:$O1$$)
-                  2000056c    00000004                           : stkdepth_vars.obj (.data)
-                  20000570    00000003     UART_Interrupt.obj (.data)
+.data      0    20000398    00000020     UNINITIALIZED
+                  20000398    0000000c     rtsv7M3_T_le_eabi.lib : exit.obj (.data:$O1$$)
+                  200003a4    00000008                           : _lock.obj (.data:$O1$$)
+                  200003ac    00000008     UART_Interrupt.obj (.data)
+                  200003b4    00000004     rtsv7M3_T_le_eabi.lib : stkdepth_vars.obj (.data)
 
-.stack     0    20000458    00000100     UNINITIALIZED
-                  20000458    00000100     --HOLE--
+.stack     0    20000258    00000100     UNINITIALIZED
+                  20000258    00000100     --HOLE--
 
 GETBUFFER 
 *          0    2007f000    00000000     DSECT
@@ -192,13 +194,13 @@ MODULE SUMMARY
        sysctl.obj                 1438   20        0      
        interrupt.obj              270    0         600    
        gpio.obj                   456    136       0      
-       uart.obj                   324    0         0      
+       uart.obj                   346    0         0      
        dcsm_z1_secvalues.obj      0      48        0      
        dcsm_z2_secvalues.obj      0      48        0      
        watchdog.obj               36     0         0      
        cpu.obj                    12     0         0      
     +--+--------------------------+------+---------+---------+
-       Total:                     2536   252       600    
+       Total:                     2558   252       600    
                                                           
     ./F28M35H52C_System/utils/
        startup_ccs.obj            12     432       0      
@@ -206,11 +208,11 @@ MODULE SUMMARY
        Total:                     12     432       0      
                                                           
     ./src/
-       UART_Interrupt.obj         120    0         515    
-       UART_Interface.obj         256    0         0      
-       A_Wellth_Main.obj          56     0         0      
+       UART_Interface.obj         328    0         0      
+       UART_Interrupt.obj         144    0         72     
+       A_Wellth_Main.obj          106    0         0      
     +--+--------------------------+------+---------+---------+
-       Total:                     432    0         515    
+       Total:                     578    0         72     
                                                           
     /home/preetham/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.1.LTS/lib/rtsv7M3_T_le_eabi.lib
        memcpy_t2.obj              156    0         0      
@@ -231,22 +233,22 @@ MODULE SUMMARY
        Total:                     792    0         24     
                                                           
        Stack:                     0      0         256    
-       Linker Generated:          0      77        0      
+       Linker Generated:          0      79        0      
     +--+--------------------------+------+---------+---------+
-       Grand Total:               3772   761       1395   
+       Grand Total:               3940   763       952    
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00204f94 records: 3, size/record: 8, table size: 24
-	.data: load addr=00204f58, load size=00000017 bytes, run addr=20000558, run size=0000001b bytes, compression=rle
-	.bss: load addr=00204f70, load size=0000000b bytes, run addr=20000258, run size=00000200 bytes, compression=rle
-	.vtable: load addr=00204f80, load size=0000000b bytes, run addr=20000000, run size=00000258 bytes, compression=rle
+__TI_cinit_table @ 00205044 records: 3, size/record: 8, table size: 24
+	.data: load addr=00205000, load size=0000001b bytes, run addr=20000398, run size=00000020 bytes, compression=rle
+	.vtable: load addr=00205020, load size=0000000b bytes, run addr=20000000, run size=00000258 bytes, compression=rle
+	.bss: load addr=00205030, load size=00000009 bytes, run addr=20000358, run size=00000040 bytes, compression=rle
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00204f8c records: 2, size/record: 4, table size: 8
+__TI_handler_table @ 0020503c records: 2, size/record: 4, table size: 8
 	index: 0, handler: __TI_decompress_rle24
 	index: 1, handler: __TI_decompress_none
 
@@ -255,22 +257,22 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                           
 -------   ----                           
-00204ac9  C$$EXIT                        
-00204e73  CPUcpsie                       
-00204e7f  CallSystem                     
+00204b25  C$$EXIT                        
+00204f21  CPUcpsie                       
+00204f2d  CallSystem                     
 00204a13  GPIODirModeSet                 
 00204455  GPIOPadConfigSet               
 002044fd  GPIOPinConfigure               
-00204d65  GPIOPinTypeUART                
-00204e95  InitMasterInterrupt            
-00204e55  InitSystem                     
+00204df5  GPIOPinTypeUART                
+00204f43  InitMasterInterrupt            
+00204e35  InitSystem                     
 00204851  InitUART0                      
 002048c5  InitUART1                      
-00204d1d  InitializeAllUart              
+00204cd5  InitializeAllUart              
 002043a9  IntEnable                      
-00204e8b  IntMasterEnable                
-00204a71  IntRegister                    
-20000572  NeglectZeros                   
+00204f39  IntMasterEnable                
+00204acd  IntRegister                    
+200003ae  NeglectZeros                   
 20000000  RamfuncsLoadEnd                
 00000000  RamfuncsLoadSize               
 20000000  RamfuncsLoadStart              
@@ -281,46 +283,49 @@ address   name
 UNDEFED   SHT$$INIT_ARRAY$$Base          
 UNDEFED   SHT$$INIT_ARRAY$$Limit         
 0020463d  SysCtlClockConfigGet           
-00204b1d  SysCtlClockConfigSet           
+00204b79  SysCtlClockConfigSet           
 0020418d  SysCtlClockDividersSet         
 002042d5  SysCtlClockGet                 
 00204001  SysCtlClockPllConfig           
-00204ea5  SysCtlDelay                    
-00204bb5  SysCtlPeripheralEnable         
-00204c81  SysCtlPeripheralIsEnabled      
+00204f4d  SysCtlDelay                    
+00204c11  SysCtlPeripheralEnable         
+00204d0d  SysCtlPeripheralIsEnabled      
 002046d1  SysCtlXPllClockDividerSet      
-20000258  UART0Buffer                    
-20000570  UART0Count                     
-00204cb9  UART0IntHandler                
-20000358  UART1Buffer                    
-20000571  UART1Count                     
-00204bfd  UART1IntHandler                
-00204df1  UARTCharGet                    
-00204da5  UARTCharGetNonBlocking         
+200003b0  TX_cnt                         
+20000358  UART0Buffer                    
+200003ac  UART0Count                     
+00204d45  UART0IntHandler                
+20000378  UART1Buffer                    
+200003ad  UART1Count                     
+00204a71  UART1IntHandler                
+00204eb1  UARTCharGet                    
+00204da9  UARTCharPut                    
 002047db  UARTConfigSetExpClk            
-00204ced  UARTDisable                    
-00204d41  UARTEnable                     
-00204e1d  UARTIntClear                   
-00204dc1  UARTIntEnable                  
-00204d87  UARTIntStatus                  
-00204e2f  WatchdogReloadSet              
-00204e41  WatchdogRunning                
-20000558  __STACK_END                    
+00204d79  UARTDisable                    
+00204e51  UARTEnable                     
+00204edd  UARTIntClear                   
+00204e69  UARTIntEnable                  
+00204e17  UARTIntStatus                  
+00204e81  UARTSpaceAvail                 
+00204eef  WatchdogReloadSet              
+00204f01  WatchdogRunning                
+00204c99  WriteToUART1                   
+20000358  __STACK_END                    
 00000100  __STACK_SIZE                   
-00204f94  __TI_CINIT_Base                
-00204fac  __TI_CINIT_Limit               
-00204f8c  __TI_Handler_Table_Base        
-00204f94  __TI_Handler_Table_Limit       
+00205044  __TI_CINIT_Base                
+0020505c  __TI_CINIT_Limit               
+0020503c  __TI_Handler_Table_Base        
+00205044  __TI_Handler_Table_Limit       
 00204939  __TI_auto_init                 
-20000558  __TI_cleanup_ptr               
-00204e65  __TI_decompress_none           
-00204eab  __TI_decompress_rle24          
-2000055c  __TI_dtors_ptr                 
-20000560  __TI_enable_exit_profile_output
+20000398  __TI_cleanup_ptr               
+00204f13  __TI_decompress_none           
+00204f53  __TI_decompress_rle24          
+2000039c  __TI_dtors_ptr                 
+200003a0  __TI_enable_exit_profile_output
 ffffffff  __TI_pprof_out_hndl            
 ffffffff  __TI_prof_data_size            
 ffffffff  __TI_prof_data_start           
-00204f58  __TI_static_base__             
+00205000  __TI_static_base__             
 00204761  __aeabi_memclr                 
 00204761  __aeabi_memclr4                
 00204761  __aeabi_memclr8                
@@ -332,25 +337,25 @@ ffffffff  __TI_prof_data_start
 00204763  __aeabi_memset8                
 ffffffff  __binit__                      
 ffffffff  __c_args__                     
-00204e53  __mpu_init                     
-20000458  __stack                        
-00204dd9  _args_main                     
-00204c41  _c_int00                       
-20000564  _lock                          
-00204e17  _nop                           
-00204e0f  _register_lock                 
-00204e09  _register_unlock               
-00204eb5  _system_post_cinit             
-00204eb1  _system_pre_init               
-20000568  _unlock                        
-00204acd  abort                          
+00204f4b  __mpu_init                     
+20000258  __stack                        
+00204e99  _args_main                     
+00204c59  _c_int00                       
+200003a4  _lock                          
+00204ed7  _nop                           
+00204ecf  _register_lock                 
+00204ec9  _register_unlock               
+00204f5d  _system_post_cinit             
+00204f59  _system_pre_init               
+200003a8  _unlock                        
+00204b29  abort                          
 ffffffff  binit                          
-00204b69  copy_in                        
-00204ad5  exit                           
+00204bc5  copy_in                        
+00204b31  exit                           
 20000000  g_pfnRAMVectors                
 00201000  g_pfnVectors                   
-00204e9d  main                           
-2000056c  main_func_sp                   
+00204dcf  main                           
+200003b4  main_func_sp                   
 002045a1  memcpy                         
 00204769  memset                         
 00200024  z1_csm_rsvd                    
@@ -394,49 +399,51 @@ address   name
 002048c5  InitUART1                      
 00204939  __TI_auto_init                 
 00204a13  GPIODirModeSet                 
-00204a71  IntRegister                    
-00204ac9  C$$EXIT                        
-00204acd  abort                          
-00204ad5  exit                           
-00204b1d  SysCtlClockConfigSet           
-00204b69  copy_in                        
-00204bb5  SysCtlPeripheralEnable         
-00204bfd  UART1IntHandler                
-00204c41  _c_int00                       
-00204c81  SysCtlPeripheralIsEnabled      
-00204cb9  UART0IntHandler                
-00204ced  UARTDisable                    
-00204d1d  InitializeAllUart              
-00204d41  UARTEnable                     
-00204d65  GPIOPinTypeUART                
-00204d87  UARTIntStatus                  
-00204da5  UARTCharGetNonBlocking         
-00204dc1  UARTIntEnable                  
-00204dd9  _args_main                     
-00204df1  UARTCharGet                    
-00204e09  _register_unlock               
-00204e0f  _register_lock                 
-00204e17  _nop                           
-00204e1d  UARTIntClear                   
-00204e2f  WatchdogReloadSet              
-00204e41  WatchdogRunning                
-00204e53  __mpu_init                     
-00204e55  InitSystem                     
-00204e65  __TI_decompress_none           
-00204e73  CPUcpsie                       
-00204e7f  CallSystem                     
-00204e8b  IntMasterEnable                
-00204e95  InitMasterInterrupt            
-00204e9d  main                           
-00204ea5  SysCtlDelay                    
-00204eab  __TI_decompress_rle24          
-00204eb1  _system_pre_init               
-00204eb5  _system_post_cinit             
-00204f58  __TI_static_base__             
-00204f8c  __TI_Handler_Table_Base        
-00204f94  __TI_CINIT_Base                
-00204f94  __TI_Handler_Table_Limit       
-00204fac  __TI_CINIT_Limit               
+00204a71  UART1IntHandler                
+00204acd  IntRegister                    
+00204b25  C$$EXIT                        
+00204b29  abort                          
+00204b31  exit                           
+00204b79  SysCtlClockConfigSet           
+00204bc5  copy_in                        
+00204c11  SysCtlPeripheralEnable         
+00204c59  _c_int00                       
+00204c99  WriteToUART1                   
+00204cd5  InitializeAllUart              
+00204d0d  SysCtlPeripheralIsEnabled      
+00204d45  UART0IntHandler                
+00204d79  UARTDisable                    
+00204da9  UARTCharPut                    
+00204dcf  main                           
+00204df5  GPIOPinTypeUART                
+00204e17  UARTIntStatus                  
+00204e35  InitSystem                     
+00204e51  UARTEnable                     
+00204e69  UARTIntEnable                  
+00204e81  UARTSpaceAvail                 
+00204e99  _args_main                     
+00204eb1  UARTCharGet                    
+00204ec9  _register_unlock               
+00204ecf  _register_lock                 
+00204ed7  _nop                           
+00204edd  UARTIntClear                   
+00204eef  WatchdogReloadSet              
+00204f01  WatchdogRunning                
+00204f13  __TI_decompress_none           
+00204f21  CPUcpsie                       
+00204f2d  CallSystem                     
+00204f39  IntMasterEnable                
+00204f43  InitMasterInterrupt            
+00204f4b  __mpu_init                     
+00204f4d  SysCtlDelay                    
+00204f53  __TI_decompress_rle24          
+00204f59  _system_pre_init               
+00204f5d  _system_post_cinit             
+00205000  __TI_static_base__             
+0020503c  __TI_Handler_Table_Base        
+00205044  __TI_CINIT_Base                
+00205044  __TI_Handler_Table_Limit       
+0020505c  __TI_CINIT_Limit               
 0027ff00  z2_csm_rsvd                    
 0027ffdc  z2secvalues                    
 20000000  RamfuncsLoadEnd                
@@ -444,19 +451,20 @@ address   name
 20000000  RamfuncsRunEnd                 
 20000000  RamfuncsRunStart               
 20000000  g_pfnRAMVectors                
-20000258  UART0Buffer                    
-20000358  UART1Buffer                    
-20000458  __stack                        
-20000558  __STACK_END                    
-20000558  __TI_cleanup_ptr               
-2000055c  __TI_dtors_ptr                 
-20000560  __TI_enable_exit_profile_output
-20000564  _lock                          
-20000568  _unlock                        
-2000056c  main_func_sp                   
-20000570  UART0Count                     
-20000571  UART1Count                     
-20000572  NeglectZeros                   
+20000258  __stack                        
+20000358  UART0Buffer                    
+20000358  __STACK_END                    
+20000378  UART1Buffer                    
+20000398  __TI_cleanup_ptr               
+2000039c  __TI_dtors_ptr                 
+200003a0  __TI_enable_exit_profile_output
+200003a4  _lock                          
+200003a8  _unlock                        
+200003ac  UART0Count                     
+200003ad  UART1Count                     
+200003ae  NeglectZeros                   
+200003b0  TX_cnt                         
+200003b4  main_func_sp                   
 ffffffff  __TI_pprof_out_hndl            
 ffffffff  __TI_prof_data_size            
 ffffffff  __TI_prof_data_start           
@@ -466,4 +474,4 @@ ffffffff  binit
 UNDEFED   SHT$$INIT_ARRAY$$Base          
 UNDEFED   SHT$$INIT_ARRAY$$Limit         
 
-[102 symbols]
+[105 symbols]

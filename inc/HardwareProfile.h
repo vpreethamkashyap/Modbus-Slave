@@ -18,8 +18,8 @@ void InitLED2(void);
 void InitLED3(void);
 void InitUART0(void);
 void InitUART1(void);
-void WriteToUART0(const unsigned char *pucBuffer);
-void WriteToUART1(const unsigned char *pucBuffer);
+void WriteToUART0(const unsigned char pucBuffer);
+void WriteToUART1(const unsigned char pucBuffer);
 
 
 /**********************************************************************************************

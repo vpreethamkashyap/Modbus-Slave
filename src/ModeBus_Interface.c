@@ -6,65 +6,63 @@
 #include"HardwareProfile.h"
 
 extern void CallSystem(void);
-extern unsigned char UART0Count;
-extern unsigned char UART0Buffer[255];
-extern unsigned char UART1Count;
-extern unsigned char UART1Buffer[255];
+extern volatile unsigned char UART0Count;
+extern volatile unsigned char UART0Buffer[30];
+extern volatile unsigned char UART1Count;
+extern volatile unsigned char UART1Buffer[30];
 /***********************************************************************************************************
 								Look ModeBus Response
 ***********************************************************************************************************/
-void PollMdbResponse(void){	
-
-	if(UART1Count >=7){
-
-		switch(MdbRes){
-			case 0:
-				//................Get SLave ID...............................................
-				if(UART1Buffer[0] == SLAVE_ID){
-					MdbRes = 1;				
-					MdbResponse[0] = UART1Buffer[0];
-				}
-				else{
-					ClearUART1Buffer();
-					break;
-				}
-
-			case 1:
+void PollMdbResponse(void)
+{
+	switch(MdbRes){
+		case 0:
+			//................Get SLave ID...............................................
+			if(UART1Buffer[0] == SLAVE_ID){
+				MdbRes = 1;
 				MdbResponse[0] = UART1Buffer[0];
-				//................Get Function Code...............................................
-				if((UART1Buffer[1] == FC_READ_COILS)||(UART1Buffer[1] == FC_READ_HOLD_REGS)||(UART1Buffer[1] == FC_WRITE_SINGLE_COIL)||(UART1Buffer[1] == FC_WRITE_SINGLE_REG)){
-					MdbResponse[1] = UART1Buffer[1];
-					MdbRes = 2;	
-				}
-				else{
-					ClearUART1Buffer();
-					break;
-				}			
+			}
+			else{
+				ClearUART1Buffer();
+				break;
+			}
 
-			case 2:
-				//................Get Address Code...............................................
-				MdbResponse[2] = UART1Buffer[2];
-				MdbResponse[3] = UART1Buffer[3];//UART1Buffer[3];
-				MdbRes = 3;	
+		case 1:
+			MdbResponse[0] = UART1Buffer[0];
+			//................Get Function Code...............................................
+			if((UART1Buffer[1] == FC_READ_COILS)||(UART1Buffer[1] == FC_READ_HOLD_REGS)||(UART1Buffer[1] == FC_WRITE_SINGLE_COIL)||(UART1Buffer[1] == FC_WRITE_SINGLE_REG)){
+				MdbResponse[1] = UART1Buffer[1];
+				MdbRes = 2;
+			}
+			else{
+				ClearUART1Buffer();
+				break;
+			}
 
-			case 3:
-				//................Get Input Data or No of Registers want to access.............
-				MdbResponse[4] = UART1Buffer[4];//UART1Buffer[4];
-				MdbResponse[5] = UART1Buffer[5];//UART1Buffer[5];
-				MdbRes = 4;	
+		case 2:
+			//................Get Address Code...............................................
+			MdbResponse[2] = UART1Buffer[2];
+			MdbResponse[3] = UART1Buffer[3];//UART1Buffer[3];
+			MdbRes = 3;
 
-			case 4:
-				//................Get CRC Bytes.................................................
-				MdbResponse[6] = UART1Buffer[6];//UART1Buffer[6];
-				MdbResponse[7] = UART1Buffer[7];//UART1Buffer[7];
-				ComputeMdbResponse(MdbResponse[1]);
-				MdbRes = 0;	
+		case 3:
+			//................Get Input Data or No of Registers want to access.............
+			MdbResponse[4] = UART1Buffer[4];//UART1Buffer[4];
+			MdbResponse[5] = UART1Buffer[5];//UART1Buffer[5];
+			MdbRes = 4;
 
-			break;
-			default:
-			break;
-		}
+		case 4:
+			//................Get CRC Bytes.................................................
+			MdbResponse[6] = UART1Buffer[6];//UART1Buffer[6];
+			MdbResponse[7] = UART1Buffer[7];//UART1Buffer[7];
+			ComputeMdbResponse(MdbResponse[1]);
+			MdbRes = 0;
+
+		break;
+		default:
+		break;
 	}
+
 }
 
 /***********************************************************************************************************
@@ -116,11 +114,6 @@ void FromWriteSingleCoil(void){
 			if(MdbResponse[4] == 0x00){
 				if(MdbResponse[5] == 0x01){
 					SendMDBResponse(FC_WRITE_SINGLE_COIL);
-				//	if(TestState ==0)
-					{
-							// Do BMI Test
-						TestState = 1;
-					}	
  					ClearUART1Buffer();
 				}
 			}			
@@ -328,69 +321,54 @@ void FromWriteSingleReg(void){
 										Mdb Request
 ************************************************************************************************************************************************/
 void SendMDBResponse(unsigned char FuncSel){
-	int i=0;
+	volatile int i=0,j=0;
+	volatile long int TimeDelay=10000;
 
-	if(TestState==0){
-		//ClearUART1Buffer();
-		//RS485_TXEN = 1;
-		switch(FuncSel){
-			case FC_WRITE_SINGLE_COIL:
-			case FC_WRITE_SINGLE_REG:
-				for(i=0;i<=7;i++){
-					MdbReq[i] = MdbResponse[i];
-					TxDelay = 80000;
+
+	switch(FuncSel){
+		case FC_WRITE_SINGLE_COIL:
+		case FC_WRITE_SINGLE_REG:
+			for(i=0;i<=7;i++){
+				MdbReq[i] = i + 0x30;// MdbResponse[i];
+				WriteToUART1(MdbReq[i]);
+
+				for(j=0;j<6;j++)
+				{
+					TimeDelay=300000;
+					while(TimeDelay--);
+				}
+			}
+			MdbReq[8] = 0;
+		break;
+		case FC_READ_COILS:
+			for(i=0;i<6;i++){
+				WriteToUART1(MdbReq[i]);
+			}
+			MdbReq[6] = 0;
+		break;
+		case FC_READ_HOLD_REGS:
+			if(NoOfBytes == 1){
+				for(i=0;i<=6;i++){
 					WriteToUART1(MdbReq[i]);
-					while(TxDelay>0){
-						TxDelay--;
-					}	
 				}
-				MdbReq[8] = 0;			
-			break;
-			case FC_READ_COILS:
-				for(i=0;i<6;i++){
+			}
+			else if(NoOfBytes == 2){
+				for(i=0;i<=8;i++){
 					WriteToUART1(MdbReq[i]);
-					TxDelay = 80000;
-					while(TxDelay>0){
-						TxDelay--;
-					}
 				}
-				MdbReq[6] = 0;
-			break;
-			case FC_READ_HOLD_REGS:
-				if(NoOfBytes == 1){
-					for(i=0;i<=6;i++){
-						TxDelay = 80000;
-						WriteToUART1(MdbReq[i]);
-						while(TxDelay>0){
-							TxDelay--;
-						}
-					}
+			}
+			else if(NoOfBytes == 3){
+				for(i=0;i<=11;i++){
+					WriteToUART1(MdbReq[i]);
 				}
-				else if(NoOfBytes == 2){
-					for(i=0;i<=8;i++){
-						TxDelay = 80000;
-						while(TxDelay>0){
-							TxDelay--;
-						}
-						WriteToUART1(MdbReq[i]);
-					}					
-				}
-				else if(NoOfBytes == 3){
-					for(i=0;i<=11;i++){
-						TxDelay = 80000;
-						while(TxDelay>0){
-							TxDelay--;
-						}
-						WriteToUART1(MdbReq[i]);
-					}
-				}
-				WriteToUART1(MdbReq);
-			break;
-			default:
-			break;
-		}
-		//RS485_TXEN = 0;
+			}
+			WriteToUART1(MdbReq);
+		break;
+		default:
+		break;
 	}
+		//RS485_TXEN = 0;
+
 }
 
 /************************************************************************************************************************************************

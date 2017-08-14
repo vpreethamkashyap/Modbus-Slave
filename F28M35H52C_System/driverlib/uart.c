@@ -246,10 +246,11 @@ UARTConfigSetExpClk(unsigned long ulBase, unsigned long ulUARTClk,
     HWREG(ulBase + UART_O_FBRD) = ulDiv % 64;
 
     // Set parity, data length, and number of stop bits.
-    HWREG(ulBase + UART_O_LCRH) = ulConfig;
+    HWREG(ulBase + UART_O_LCRH) = (ulConfig);
 
     // Clear the flags register.
     HWREG(ulBase + UART_O_FR) = 0;
+
 
     // Start the UART.
     UARTEnable(ulBase);
@@ -325,12 +326,13 @@ UARTEnable(unsigned long ulBase)
     // Check the arguments.
     ASSERT(UARTBaseValid(ulBase));
 
-    // Enable the FIFO.
-    HWREG(ulBase + UART_O_LCRH) |= UART_LCRH_FEN;
+    //HWREG(ulBase + UART_O_LCRH) |= UART_LCRH_FEN;
 
     // Enable RX, TX, and the UART.
     HWREG(ulBase + UART_O_CTL) |= (UART_CTL_UARTEN | UART_CTL_TXE |
                                    UART_CTL_RXE);
+
+    //HWREG(ulBase + UART_O_IFLS) = 0x00000000;
 }
 
 //*****************************************************************************
@@ -911,10 +913,14 @@ UARTCharPut(unsigned long ulBase, unsigned char ucData)
     // Check the arguments.
     ASSERT(UARTBaseValid(ulBase));
 
+
+
     // Wait until space is available.
     while(HWREG(ulBase + UART_O_FR) & UART_FR_TXFF)
     {
     }
+
+    while(HWREG(ulBase + UART_O_FR) & UART_FR_BUSY);
 
     // Send the char.
     HWREG(ulBase + UART_O_DR) = ucData;
@@ -1274,6 +1280,31 @@ UARTRxErrorClear(unsigned long ulBase)
     HWREG(ulBase + UART_O_ECR) = 0;
 }
 
+
+void Switch_OFF_UART_1_TX(void)
+{
+	HWREG(UART1_BASE + UART_O_CTL) &= ~( UART_CTL_TXE);
+}
+
+
+void Switch_ON_UART_1_TX(void)
+{
+	HWREG(UART1_BASE + UART_O_CTL) |= (UART_CTL_TXE);
+}
+
+
+void Switch_OFF_UART_1_RX(void)
+{
+	HWREG(UART1_BASE + UART_O_CTL) &= ~( UART_CTL_RXE);
+	HWREG(UART0_BASE + UART_O_CTL) &= ~( UART_CTL_RXE);
+}
+
+
+void Switch_ON_UART_1_RX(void)
+{
+	HWREG(UART1_BASE + UART_O_CTL) |= (UART_CTL_RXE);
+	HWREG(UART0_BASE + UART_O_CTL) |= (UART_CTL_RXE);
+}
 //*****************************************************************************
 // Close the Doxygen group.
 //! @}

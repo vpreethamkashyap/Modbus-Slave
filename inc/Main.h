@@ -37,17 +37,17 @@ extern void InitSystem(void);
 extern void InitUART0(void);
 extern void InitUART1(void);
 
-extern void WriteToUART0(const unsigned char *);
-extern void WriteToUART1(const unsigned char *);
+extern void WriteToUART0(const unsigned char);
+extern void WriteToUART1(const unsigned char );
 
 
 /**********************************************************************************************
 						Declarations of Variables
 **********************************************************************************************/
-extern unsigned char UART0Count;
-extern unsigned char UART0Buffer[255];
-extern unsigned char UART1Count;
-extern unsigned char UART1Buffer[255];
+extern volatile unsigned char UART0Count;
+extern volatile unsigned char UART0Buffer[30];
+extern volatile unsigned char UART1Count;
+extern volatile unsigned char UART1Buffer[30];
 extern unsigned char DataReady;
 extern unsigned char NeglectZeros;
 extern unsigned char WeightData;

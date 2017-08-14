@@ -3,18 +3,78 @@
 
 void CallSystem(void);
 
-
+extern unsigned int TX_cnt;
 /**********************************************************************************************
 						Start Of Main Function
 **********************************************************************************************/
+
 
 int main(void){
 
 	CallSystem();
 
-	while (1){
+	/*WriteToUART1('A');
+	WriteToUART1('B');
+	WriteToUART1('C');
+	WriteToUART1('D');
+	WriteToUART1('E');*/
+	int loopcnt = 0;
 
-		//PollMdbResponse();
+#if 0
+	WriteToUART1((loopcnt+0x30));
+
+	while(1)
+	{
+		if(TX_cnt)
+		{
+			TX_cnt=0;
+			WriteToUART1((loopcnt+0x30));
+			loopcnt++;
+			if(loopcnt>9)
+			{
+				loopcnt=0;
+
+			}
+		}
+	}
+#endif
+
+#if 1
+	while(1)
+	{
+		WriteToUART1((loopcnt+0x30));
+		loopcnt++;
+		if(loopcnt>9)
+		{
+			loopcnt=0;
+			//break;
+
+		}
+	}
+#endif
+
+	//Switch_OFF_UART_1_TX();
+
+	while(1)
+	{
+/*		unsigned int status_fr = (HWREG(UART1_BASE + 0x00000008));
+		unsigned int status_sr = (HWREG(UART1_BASE + 0x00000004));
+		unsigned int status_dr = (HWREG(UART1_BASE + 0x00000000));*/
+		//WriteToUART1('A');
+		if(UART1Count >=8)
+		{
+			/*Switch_OFF_UART_1_RX();
+			Switch_ON_UART_1_TX();
+		    IntDisable(INT_UART1);
+		    UARTIntDisable(UART1_BASE, UART_INT_RX);*/
+
+			PollMdbResponse();
+
+		/*	Switch_OFF_UART_1_TX();
+			Switch_ON_UART_1_RX();
+			IntEnable(INT_UART1);
+		    UARTIntEnable(UART1_BASE, UART_INT_RX);*/
+		}
 	}
 
 }
@@ -30,8 +90,12 @@ void CallSystem(void){
 
 void InitializeAllUart(void){
 
-	memset(UART1Buffer,0,255);
+	memset(UART1Buffer,0,30);
+	memset(UART1Buffer,0,30);
 	UART1Count = 0;
+
+	UART0Count = 0;
+
 	InitUART1();
 	InitUART0();
 }

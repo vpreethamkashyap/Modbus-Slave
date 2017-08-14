@@ -1,8 +1,10 @@
 #include"HardwareProfile.h"
 
 
-void InitSystem(void){
-
+void InitSystem(void)
+{
+	// Disable Protection
+	HWREG(0x400FB980) =  0xA5A5A5A5;
 	SysCtlClockConfigSet(SYSCTL_USE_PLL | (SYSCTL_SPLLIMULT_M & 0xF) |
 	            SYSCTL_SYSDIV_1 | SYSCTL_M3SSDIV_2 |
 	            SYSCTL_XCLKDIV_4);
@@ -27,8 +29,8 @@ void InitUART0(void){
         	                         UART_CONFIG_PAR_NONE));
     // Enable the UART0 interrupt.
     IntRegister(INT_UART0, UART0IntHandler);
-    IntEnable(INT_UART0);
-    UARTIntEnable(UART0_BASE, UART_INT_RX);
+   IntEnable(INT_UART0);
+   UARTIntEnable(UART0_BASE, UART_INT_RX);
 
 }
 
@@ -48,8 +50,7 @@ void InitUART1(void){
     // Enable the UART0 interrupt.
      IntRegister(INT_UART1, UART1IntHandler);
      IntEnable(INT_UART1);
-     UARTIntEnable(UART1_BASE, UART_INT_RX);
-
+     UARTIntEnable(UART1_BASE, UART_INT_RX | UART_INT_TX);
 }
 
 void InitLED2(void){
@@ -69,15 +70,27 @@ void InitLED3(void){
 	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, ~0);
 }
 
-void WriteToUART0(const unsigned char *pucBuffer){
-
+void WriteToUART0(const unsigned char pucBuffer)
+{
 	// Write the next character to the UART.
-	UARTCharPutNonBlocking(UART0_BASE, *pucBuffer++);
+	///UARTCharPut(UART0_BASE, pucBuffer);
 }
 
-void WriteToUART1(const unsigned char *pucBuffer){
+extern unsigned int TX_cnt;
+void WriteToUART1(const unsigned char pucBuffer)
+{
+	//UARTCharPut(UART1_BASE,pucBuffer);
 
-	// Write the next character to the UART.
-	UARTCharPutNonBlocking(UART1_BASE, *pucBuffer++);
+	while(1)
+	{
+		if(UARTSpaceAvail(UART1_BASE))
+		{
+			UARTCharPut(UART1_BASE,pucBuffer);
+			while(!TX_cnt);
+			TX_cnt=0;
+			return;
+		}
+	}
 }
+
 
