@@ -39,10 +39,21 @@ int main(void){
 	}
 #endif
 
-#if 1
+#if 0
+	//Switch_OFF_UART_1_RX();
+	//Switch_ON_UART_1_TX();
+//	IntDisable(INT_UART1);
+	//UARTIntDisable(UART1_BASE, UART_INT_RX);
+
+	volatile int TimeDelay;
 	while(1)
 	{
 		WriteToUART1((loopcnt+0x30));
+		TimeDelay=900000;
+		//while(TimeDelay--);
+
+
+
 		loopcnt++;
 		if(loopcnt>9)
 		{
@@ -68,12 +79,13 @@ int main(void){
 		    IntDisable(INT_UART1);
 		    UARTIntDisable(UART1_BASE, UART_INT_RX);*/
 
+			change_fifo_len_by_1();
 			PollMdbResponse();
-
-		/*	Switch_OFF_UART_1_TX();
+			change_fifo_len_by_def();
+			/*Switch_OFF_UART_1_TX();
 			Switch_ON_UART_1_RX();
 			IntEnable(INT_UART1);
-		    UARTIntEnable(UART1_BASE, UART_INT_RX);*/
+		    UARTIntEnable(UART1_BASE, UART_INT_RX); */
 		}
 	}
 

@@ -332,7 +332,7 @@ void SendMDBResponse(unsigned char FuncSel){
 				MdbReq[i] = i + 0x30;// MdbResponse[i];
 				WriteToUART1(MdbReq[i]);
 
-				for(j=0;j<6;j++)
+				//for(j=0;j<6;j++)
 				{
 					TimeDelay=300000;
 					while(TimeDelay--);

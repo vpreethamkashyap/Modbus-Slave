@@ -34,7 +34,6 @@ OBJS__QUOTED += \
 "src/UART_Interrupt.obj" 
 
 C_SRCS__QUOTED += \
-"../src/A_Wellth_Main.c" \
 "../src/ModeBus_Interface.c" \
 "../src/UART_Interface.c" \
 "../src/UART_Interrupt.c" 

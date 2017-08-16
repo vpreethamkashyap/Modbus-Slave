@@ -50,14 +50,12 @@ void UART1IntHandler(void)
         }
         TX_cnt = 0;
     }
-    else
+
+    if(0x20 & ulStatus)
     {
     	TX_cnt=1;
     }
 
     UARTIntClear(UART1_BASE, ulStatus);
-
-
-
 
 }

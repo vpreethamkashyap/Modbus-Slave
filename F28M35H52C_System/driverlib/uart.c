@@ -238,6 +238,9 @@ UARTConfigSetExpClk(unsigned long ulBase, unsigned long ulUARTClk,
         HWREG(ulBase + UART_O_CTL) &= ~(UART_CTL_HSE);
     }
 
+
+    HWREG(ulBase + UART_O_CTL) |= 0x10;
+
     // Compute the fractional baud rate divider.
     ulDiv = (((ulUARTClk * 8) / ulBaud) + 1) / 2;
 
@@ -326,14 +329,26 @@ UARTEnable(unsigned long ulBase)
     // Check the arguments.
     ASSERT(UARTBaseValid(ulBase));
 
-    //HWREG(ulBase + UART_O_LCRH) |= UART_LCRH_FEN;
+    HWREG(ulBase + UART_O_LCRH) |= UART_LCRH_FEN;
 
     // Enable RX, TX, and the UART.
     HWREG(ulBase + UART_O_CTL) |= (UART_CTL_UARTEN | UART_CTL_TXE |
                                    UART_CTL_RXE);
 
-    //HWREG(ulBase + UART_O_IFLS) = 0x00000000;
+    //HWREG(ulBase + UART_O_IFLS) = 0x00000024;
 }
+
+void change_fifo_len_by_def(void)
+{
+	HWREG(UART1_BASE + UART_O_IFLS) = 0x00000012;
+}
+
+void change_fifo_len_by_1(void)
+{
+	HWREG(UART1_BASE + UART_O_IFLS) = 0x00000024;
+}
+
+
 
 //*****************************************************************************
 //! Disables transmitting and receiving.
@@ -1082,7 +1097,7 @@ UARTIntEnable(unsigned long ulBase, unsigned long ulIntFlags)
     ASSERT(UARTBaseValid(ulBase));
 
     // Enable the specified interrupts.
-    HWREG(ulBase + UART_O_IM) |= ulIntFlags;
+    HWREG(ulBase + UART_O_IM) |= 0x3F0;//ulIntFlags;
 }
 
 //*****************************************************************************
