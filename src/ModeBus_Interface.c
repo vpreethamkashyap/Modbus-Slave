@@ -11,7 +11,7 @@ extern volatile unsigned char UART0Buffer[30];
 extern volatile unsigned char UART1Count;
 extern volatile unsigned char UART1Buffer[30];
 /***********************************************************************************************************
-								Look ModeBus Response
+								ModBus Response
 ***********************************************************************************************************/
 void PollMdbResponse(void)
 {
@@ -66,6 +66,7 @@ void PollMdbResponse(void)
 }
 
 /***********************************************************************************************************
+ *                          Compute a required response back to Master
 ***********************************************************************************************************/
 
 void ComputeMdbResponse(unsigned char FuncSel){
@@ -94,7 +95,7 @@ void ComputeMdbResponse(unsigned char FuncSel){
 	}
 }
 /***********************************************************************************************************************************************
-	# This Function is used when Master Want to Operate any Sensor Test
+	# This Function is used when Master Want to write or request a single coil response
 	# For Each Test Master has defined the particular Address
 	# Slave looks Address of coil & Data value on that Coil
 	# Slave Sends Back the Same Response Back to Master 
@@ -123,7 +124,7 @@ void FromWriteSingleCoil(void){
 				if(MdbResponse[5] == 0x01){			
 					SendMDBResponse(FC_WRITE_SINGLE_COIL);
 					NeglectZeros = 0;
-					//DoBPCheck();									// Do BP Test
+					//DoBPCheck();									// Do
 					TestState = 2;
  					ClearUART1Buffer();
 				}
@@ -133,7 +134,7 @@ void FromWriteSingleCoil(void){
 			if(MdbResponse[4] == 0x00){
 				if(MdbResponse[5] == 0x01){			
 					SendMDBResponse(FC_WRITE_SINGLE_COIL);
-					//DoBLICheck();									// Do BLI Test
+					//DoBLICheck();									// Do
 					TestState = 3;
  					ClearUART1Buffer();
 				}
@@ -142,7 +143,7 @@ void FromWriteSingleCoil(void){
 	}
 }
 /***********************************************************************************************************************************************
-	# This Function is used when Master Want to know the current status of Sensor Test
+	# This Function is used when Master Want to know the current status
 	# For Each Test Master has defined the only one Address
 	# Slave looks Address of coil & Data value on that Coil
 	# Slave Sends Back the Response Back to Master If Sensor Test Completed then It will send 0x0001 
@@ -329,14 +330,10 @@ void SendMDBResponse(unsigned char FuncSel){
 		case FC_WRITE_SINGLE_COIL:
 		case FC_WRITE_SINGLE_REG:
 			for(i=0;i<=7;i++){
-				MdbReq[i] = i + 0x30;// MdbResponse[i];
+				MdbReq[i] = MdbResponse[i];
 				WriteToUART1(MdbReq[i]);
-
-				//for(j=0;j<6;j++)
-				{
-					TimeDelay=300000;
-					while(TimeDelay--);
-				}
+				TimeDelay=300000;
+				while(TimeDelay--);
 			}
 			MdbReq[8] = 0;
 		break;
